@@ -1,8 +1,7 @@
 html 
     head 
-        title my first pug
+        title=title
     body
         div(style='background-color: lightblue;' class='container')
-            h1 Hello World!
-        div
-            p This is my first pug file.
+            h1= message.name
+            div= message.age
