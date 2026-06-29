@@ -3,11 +3,22 @@ const app = express();
 const userRoute = require('./routes/userRoute');
 const empRoute = require('./routes/empRoute');
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'pug');
 app.set('views', './views');
+
+app.use(express.static('public'));
+
+const requestTime = function (req, res, next) {
+  req.requestTime = Date.now();
+  next();
+};
+
+app.use(requestTime);
 
 
 app.get('/', (req, res) => {
+
+  
   const message = {name: 'Nirav', age: 30};
   res.render('index', { title: 'Hey', message: message });
   // res.send('Hello World!');
@@ -17,7 +28,7 @@ app.post('/', (req, res) => {
   res.send('Post Request to the homepage');
 });
 
-app.use('/user', userRoute);
+app.use('/appuser', userRoute);
 app.use('/emp', empRoute);
 
 app.listen(3000,()=>{
