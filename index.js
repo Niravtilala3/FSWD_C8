@@ -1,7 +1,13 @@
 const express = require('express');
 const app = express();
+
+const mongoose = require('mongoose');
+
+const mongoUri = 'mongodb://127.0.0.1:27017/FSWD_C8';
+
 const userRoute = require('./routes/userRoute');
 const empRoute = require('./routes/empRoute');
+const userViewRoute = require('./routes/userViewRoute');
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -31,6 +37,7 @@ app.post('/', (req, res) => {
 });
 
 app.use('/user', userRoute);
+app.use('/users', userViewRoute);
 app.use('/emp', empRoute);
 
 app.get('/error', (req, res) => {
@@ -47,6 +54,18 @@ app.use((req, res, next) => {
   res.status(404).render('404', { title: '404 Not Found' });
 });
 
-app.listen(3000,()=>{
-  console.log('Server is running on port http://localhost:3000');
-});
+const startServer = async () => {
+  try {
+    await mongoose.connect(mongoUri);
+    console.log('Connected to MongoDB');
+
+    app.listen(`3000`,()=>{
+      console.log('Server is running on port http://localhost:3000');
+    });
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+    process.exit(1);
+  }
+}
+
+startServer();

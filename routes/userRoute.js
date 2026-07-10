@@ -1,51 +1,57 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/User');
 
-const users= [
-  { id: 1, name: 'John Doe', city: 'Rajkot'},
-  { id:2, name: 'raj', city :'Rajkot '},
-]
-
-
-router.get('/',(req, res)=>{
+router.get('/', async (req, res) => {
+  const users = await User.find();
   res.json(users);
-})
-
-router.get('/:usrId',(req, res)=>{
-  const user = users.find(u => u.id === parseInt(req.params.usrId));
-  if (!user){
-    return res.status(404).json({ error: 'User not found' });
-  }
-  res.json(user);
-})
-
-router.post('/',(req, res)=>{
-  const newUser = {
-    id: users.length + 1,
-    name: req.body.name,
-    city: req.body.city
-  };
-  users.push(newUser);
-  res.status(201).json(newUser);
 });
 
-router.put('/:usrId',(req, res)=>{
-  const user = users.find(u => u.id === parseInt(req.params.usrId));
-  if (!user){
-    return res.status(404).json({ error: 'User not found' });
-  }
-  if(req.body && req.body.name) user.name = req.body.name;
-  if(req.body && req.body.city) user.city = req.body.city ;
+router.get('/:userId', async (req, res) => {
+  const user = await User.findById(req.params.userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
 
-router.delete('/:usrId',(req, res)=>{
-  const userIndex = users.findIndex(u => u.id === parseInt(req.params.usrId));
-  if (userIndex === -1){
-    return res.status(404).json({ error: 'User not found' });
+router.post('/', async (req, res) => {
+  try {
+    const newUser = await User.create({
+      name: req.body.name,
+      address: req.body.address,
+    });
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-  const deletedUser = users.splice(userIndex, 1);
-  res.json(deletedUser[0]);
+});
+
+router.put('/:userId', async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        name: req.body.name,
+        address: req.body.address,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!updatedUser) return res.status(404).json({ error: 'User not found' });
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.delete('/:userId', async (req, res) => {
+  const deletedUser = await User.findByIdAndDelete(req.params.userId);
+  if (!deletedUser) return res.status(404).json({ error: 'User not found' });
+
+  res.json(deletedUser);
 });
 
 router.get('/info',(req, res)=>{
