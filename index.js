@@ -8,6 +8,7 @@ const mongoUri = 'mongodb://127.0.0.1:27017/FSWD_C8';
 const userRoute = require('./routes/userRoute');
 const empRoute = require('./routes/empRoute');
 const userViewRoute = require('./routes/userViewRoute');
+const studentRoute = require('./routes/studentRoute');
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -40,6 +41,7 @@ app.post('/', (req, res) => {
 app.use('/user', userRoute);
 app.use('/users', userViewRoute);
 app.use('/emp', empRoute);
+app.use('/students', studentRoute);
 
 app.get('/error', (req, res) => {
   throw new Error('BROKEN');

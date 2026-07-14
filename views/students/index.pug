@@ -1,0 +1,8 @@
+html
+    head 
+        title Students List
+    body
+        h1 Students List
+        ul
+            each student in students
+                li= student.rollNumber + ' - ' + student.name + ' - ' + student.address

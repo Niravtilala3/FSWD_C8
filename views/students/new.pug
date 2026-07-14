@@ -1,0 +1,17 @@
+html
+    head
+        title Add Student
+    body
+        h1 Add Student
+        form(action="/students" method="POST")
+            div
+                label(for="name") Name:
+                input(type="text" name="name" required)
+            div
+                label(for="rollNumber") rollno: 
+                input(type="number" name="rollNumber" required)
+            div 
+                label(for="address") Address:
+                input(type="text" name="address" required)
+            div
+                button(type="submit") Add Student

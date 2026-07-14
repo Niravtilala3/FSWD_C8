@@ -3,6 +3,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      index: true,
     },
     address: {
       type: String,
