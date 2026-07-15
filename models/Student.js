@@ -13,12 +13,7 @@ const studentSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-    }, 
-    statics: {
-      findByRollNumber(rollNumber) {
-        return this.findOne({ rollNumber });
-      }
-    } 
+    }
   },
   {
     timestamps: true,

@@ -1,0 +1,17 @@
+html
+    head
+        title= title
+    body
+        h1= title
+        form(action='/students/' + student._id + '/edit', method='POST')
+            div
+                label(for="name") Name:
+                input(type="text" name="name" value=student.name required)
+            div
+                label(for="rollNumber") Roll Number:
+                input(type="number" name="rollNumber" value=student.rollNumber required)
+            div 
+                label(for="address") Address:
+                input(type="text" name="address" value=student.address required)
+            div
+                button(type="submit") Update Student

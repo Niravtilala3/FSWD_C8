@@ -3,6 +3,14 @@ html
         title Students List
     body
         h1 Students List
-        ul
+        div
             each student in students
-                li= student.rollNumber + ' - ' + student.name + ' - ' + student.address
+                div= student.rollNumber + ' - ' + student.name + ' - ' + student.address
+                    span 
+                        a(href='/students/' + student._id) View
+                        |  | 
+                        a(href='/students/' + student._id + '/edit') Edit
+                        |  | 
+                        
+                        form(style='display:inline;' action='/students/' + student._id + '/delete', method='POST')
+                            button(type='submit') Delete
