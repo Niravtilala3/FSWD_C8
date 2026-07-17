@@ -6,12 +6,30 @@ html
         form(action="/students" method="POST")
             div
                 label(for="name") Name:
-                input(type="text" name="name" required)
+                input(type="text" name="name")
             div
                 label(for="rollNumber") rollno: 
-                input(type="number" name="rollNumber" required)
+                input(type="number" name="rollNumber")
             div 
                 label(for="address") Address:
-                input(type="text" name="address" required)
+                input(type="text" name="address")
+            div
+                label(for="gender") Gender:
+                select(name="gender")
+                    option(value="Male")
+                        | Male 
+                    option(value="Female")
+                        | Female
+                    option(value="Other")
+                        | Other
+
+            div
+                label(for="password") Password:
+                input(type="password" name="password")
             div
                 button(type="submit") Add Student
+            div
+                if errors
+                    ul
+                        each error in errors
+                            li= error.message

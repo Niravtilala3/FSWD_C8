@@ -15,13 +15,23 @@ studentCtl.studentNewForm = (req, res) => {
 
 // POST create new student
 studentCtl.studentCreate = async (req, res, next) => {
+  try {
     const student = await Student.create({
       name: req.body.name,
       rollNumber: req.body.rollNumber,
       address: req.body.address,
+      gender: req.body.gender, 
+      password: req.body.password, 
     });
     // res.send('Student created successfully');
     res.redirect(`/students`);
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      res.status(400).render('students/new', { title: 'Create Student', errors: error.errors });
+    } else {
+      next(error);
+    }
+  }
 }
 
 // GET individual student
