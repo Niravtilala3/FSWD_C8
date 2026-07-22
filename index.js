@@ -1,14 +1,17 @@
 const express = require('express');
+require('dotenv').config();
 const app = express();
 
 const mongoose = require('mongoose');
 
-const mongoUri = 'mongodb://127.0.0.1:27017/FSWD_C8';
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/FSWD_C8';
 
 const userRoute = require('./routes/userRoute');
 const empRoute = require('./routes/empRoute');
 const userViewRoute = require('./routes/userViewRoute');
 const studentRoute = require('./routes/studentRoute');
+const Book = require('./models/Book');
+const Author = require('./models/author');
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -36,6 +39,11 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
   res.send('Post Request to the homepage');
+});
+
+app.get('/book', async (req, res) => {
+  const books = await Book.findOne({title: 'My book'}).populate('author');
+  res.json(books);
 });
 
 app.use('/user', userRoute);
