@@ -1,17 +1,15 @@
 const express = require('express');
 require('dotenv').config();
 const app = express();
-
-const mongoose = require('mongoose');
-
-const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/FSWD_C8';
-
+const databseConnection = require('./config/database');
 const userRoute = require('./routes/userRoute');
 const empRoute = require('./routes/empRoute');
 const userViewRoute = require('./routes/userViewRoute');
 const studentRoute = require('./routes/studentRoute');
 const Book = require('./models/Book');
 const Author = require('./models/author');
+
+databseConnection();
 
 app.set('view engine', 'pug');
 app.set('views', './views');
@@ -42,7 +40,7 @@ app.post('/', (req, res) => {
 });
 
 app.get('/book', async (req, res) => {
-  const books = await Book.findOne({title: 'My book'}).populate('author');
+  const books = await Book.find().populate('author');
   res.json(books);
 });
 
@@ -65,18 +63,6 @@ app.use((req, res, next) => {
   res.status(404).render('404', { title: '404 Not Found' });
 });
 
-const startServer = async () => {
-  try {
-    await mongoose.connect(mongoUri);
-    console.log('Connected to MongoDB');
-
-    app.listen(`3000`,()=>{
-      console.log('Server is running on port http://localhost:3000');
-    });
-  } catch (error) {
-    console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
-  }
-}
-
-startServer();
+app.listen(process.env.POST,()=>{
+  console.log('Server is running on port http://localhost:' + process.env.POST);
+});
